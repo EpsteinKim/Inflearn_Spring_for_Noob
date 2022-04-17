@@ -3,31 +3,28 @@ package com.example.inflearn.service;
 import com.example.inflearn.domain.Member;
 import com.example.inflearn.repository.MemberRepository;
 import com.example.inflearn.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemberServiceTest {
+@SpringBootTest
+@Transactional
 
-    MemberService memberService;
-    MemoryMemberRepository memberRepository;
+/*
+DB는 원래 Commit을 해야 반영이 된다
+Transactional이라는 어노테이션을 붙인다면 Commit을 하지 않고 롤백한다는 이야기다.
+*/
+class MemberServiceIntegrationTest {
 
-    @BeforeEach
-    public void beforeEach(){
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
-        // 외부에서 값을 주입하는 것 이런것을 DI라고 한다.
-        // 의존성 주입 (Dependency Injection)
-    }
-
-    @AfterEach
-    public void afterEach(){
-        memberRepository.clearStore();
-    }
+    @Autowired MemberService memberService;
+    @Autowired MemberRepository memberRepository;
 
     @Test
     void 회원가입() {
@@ -65,11 +62,4 @@ class MemberServiceTest {
         //then
     }
 
-    @Test
-    void 전부찾기() {
-    }
-
-    @Test
-    void 아이디로찾기() {
-    }
 }
